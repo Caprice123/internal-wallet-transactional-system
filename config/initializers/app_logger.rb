@@ -22,7 +22,6 @@ class AppLogger
     end
 
     def configure_logger(tag)
-      pp tag
       logger = Logger.new(Rails.root.join("log", "#{tag}.log"))
       logger.extend(ActiveSupport::Logger.broadcast(Logger.new(STDOUT))) unless Rails.env.test?
       logger.formatter = formatter_for_concern(tag)
@@ -31,7 +30,6 @@ class AppLogger
     end
 
     def formatter_for_concern(tag)
-      pp tag
       proc do |severity, datetime, _progname, msg|
         string_message = if msg.is_a?(String)
                            msg

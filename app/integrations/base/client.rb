@@ -25,6 +25,7 @@ module Base
       )
       response
     rescue StandardError => e
+      pp e
       AppLogger.integration.error(
         log_body.merge!(
           {
@@ -36,6 +37,12 @@ module Base
           },
         ),
       )
+    end
+
+    private_class_method def self.try_constantize(string_klass)
+      string_klass.constantize.response_class
+    rescue NameError
+      Base::Response
     end
   end
 end
