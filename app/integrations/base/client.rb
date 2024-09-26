@@ -25,7 +25,6 @@ module Base
       )
       response
     rescue StandardError => e
-      pp e
       AppLogger.integration.error(
         log_body.merge!(
           {

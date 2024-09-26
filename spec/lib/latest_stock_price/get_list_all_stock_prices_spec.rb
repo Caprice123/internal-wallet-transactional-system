@@ -1,11 +1,15 @@
 describe LatestStockPrice::GetListAllStockPrices do
+  subject { described_class.call }
+
+  before do
+    expect(RapidApi::Client).to receive(:get_list_stock_prices).and_call_original
+  end
+
   context "when third party responds success" do
     it "returns the stock data" do
       RapidApi::Requests::GetListStockPricesRequest.start_faking!(:success)
 
-      response = described_class.call
-      expect(response.http_code).to eq(200)
-      expect(response.http_body).to eq(
+      expect(subject).to eq(
         [
           {
             Symbol: "ZOMA.NS",
@@ -41,8 +45,6 @@ describe LatestStockPrice::GetListAllStockPrices do
       expect do
         described_class.call
       end.to raise_error(RemoteError::UnexpectedError)
-
-      # expect(response.http_code).to eq(500)
     end
   end
 end

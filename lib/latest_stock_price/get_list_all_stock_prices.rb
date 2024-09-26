@@ -5,7 +5,7 @@ module LatestStockPrice
         response = RapidApi::Client.get_list_stock_prices
         response.raise_error_if_needed!
 
-        response
+        response.parsed_body
       end
     end
   end

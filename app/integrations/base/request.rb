@@ -16,7 +16,6 @@ module Base
           result
         else
           @faking_method_stack << faking_method
-          pp @faking_method_stack
         end
       end
 
@@ -91,7 +90,6 @@ module Base
     def query; end
 
     def fire!
-      pp self.class.current_faking_method.present?
       if self.class.current_faking_method.present?
         fake_api_hit!(self.class.current_faking_method)
       else
@@ -101,11 +99,7 @@ module Base
 
     private def fake_api_hit!(faking_method)
       raise "Method should not be called in production environment" if Rails.env.worker? || Rails.env.production?
-      # pp faking_method
-      # pp self.class.faz
-      # pp self.class.fake_response(faking_method)
-      # response = self.class.fake_response(faking_method).call(self)
-      pp self.class.fake_response(faking_method).call
+
       response =
         case faking_method
         when Symbol
@@ -114,7 +108,7 @@ module Base
           faking_method.call(self)
         end
       raise "Please ensure the fake response using the #{self.class}.response_class" unless response.is_a?(self.class.response_class)
-      pp response
+
       response
     end
 
