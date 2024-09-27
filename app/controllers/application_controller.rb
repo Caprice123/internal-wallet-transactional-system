@@ -47,7 +47,6 @@ class ApplicationController < ActionController::API
     @application_tag ||= nil
     payload[:account_id] = @current_user&.id
     payload[:error] = @error
-    payload[:application_tag] = @application_tag
     payload[:response] =
       if %w[application/vnd.openxmlformats-officedocument.spreadsheetml.sheet pdf].include?(payload[:params][:format])
         nil

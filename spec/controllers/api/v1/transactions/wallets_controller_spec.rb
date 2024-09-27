@@ -108,4 +108,59 @@ describe "api/v1/transactions/wallets", type: :request do
       end
     end
   end
+
+  describe "#transfer" do
+    let!(:url) { "#{prefix_url}/transfer" }
+    let!(:wallet2) { create(:wallet, current_balance: 0) }
+    let!(:params) do
+      {
+        targetWalletId: wallet2.id,
+        amount: 10,
+      }
+    end
+    let!(:headers) do
+      {
+        Authorization: "Bearer #{account_session.session_id}",
+      }
+    end
+
+    context "when transfer service returns success" do
+      it "returns session id to the user" do
+        expect(Transactions::Wallet::TransferService).to receive(:call)
+          .with(account: wallet.account, target_wallet_id: wallet2.id, amount: 10)
+          .and_call_original
+
+        post(url, params: params, headers: headers)
+
+        expect(response.code).to eq("201")
+        expect(response_body[:data]).to eq(
+          {
+            walletId: wallet.id,
+            currentBalance: 0,
+          },
+        )
+      end
+    end
+
+    context "when transfer service raises any error" do
+      it "returns error to the user" do
+        expect(Transactions::Wallet::TransferService).to receive(:call)
+          .with(account: wallet.account, target_wallet_id: wallet2.id, amount: 10)
+          .and_raise(Transactions::WalletError::AmountMustBeBiggerThanZero)
+
+        post(url, params: params, headers: headers)
+
+        expect(response.code).to eq("400")
+        expect(response_body[:errors]).to eq(
+          [
+            {
+              title: "Amount harus lebih besar dari 0",
+              detail: "Amount harus lebih besar dari 0",
+              errorCode: 1000,
+            },
+          ],
+        )
+      end
+    end
+  end
 end

@@ -17,6 +17,15 @@ module Transactions::WalletError
     )
   end
 
+  class TargetWalletNotFound < HandledError
+    default(
+      title: "Target wallet tidak ditemukan",
+      detail: "Target wallet tidak ditemukan",
+      code: 1000,
+      status: :not_found,
+    )
+  end
+
   class BalanceNotEnough < HandledError
     default(
       title: "Balance wallet tidak mencukupi",

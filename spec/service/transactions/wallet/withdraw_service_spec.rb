@@ -10,7 +10,7 @@ describe Transactions::Wallet::WithdrawService do
   end
 
   context "when user doesn't have any wallet" do
-    it "raises error that indicatess user currently don't have any wallet" do
+    it "raises error that indicates user currently don't have any wallet" do
       expect do
         described_class.call(account: account, amount: 1)
       end.to raise_error(Transactions::WalletError::WalletNotFound)
@@ -40,13 +40,13 @@ describe Transactions::Wallet::WithdrawService do
       transaction = CreditTransaction.last
       expect(transaction.source_wallet_id).to be_nil
       expect(transaction.target_wallet_id).to eq(wallet.id)
-      expect(transaction.amount).to eq(-1)
+      expect(transaction.amount).to eq(1)
       expect(transaction.type).to eq("CreditTransaction")
 
       ledger = Ledger.last
       expect(ledger.transaction_id).to eq(transaction.id)
       expect(ledger.wallet_id).to eq(wallet.id)
-      expect(ledger.amount).to eq(1)
+      expect(ledger.amount).to eq(-1)
       expect(ledger.initial_balance).to eq(10)
       expect(ledger.updated_balance).to eq(9)
     end
