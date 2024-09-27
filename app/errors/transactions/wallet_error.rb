@@ -16,4 +16,13 @@ module Transactions::WalletError
       status: :not_found,
     )
   end
+
+  class BalanceNotEnough < HandledError
+    default(
+      title: "Balance wallet tidak mencukupi",
+      detail: "Balance wallet tidak mencukupi",
+      code: 1000,
+      status: :not_found,
+    )
+  end
 end

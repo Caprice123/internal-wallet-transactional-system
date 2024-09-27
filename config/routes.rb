@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         resources :wallets, only: %i[] do
           collection do
             post "/deposit", to: "wallets#deposit"
+            post "/withdraw", to: "wallets#withdraw"
           end
         end
       end
