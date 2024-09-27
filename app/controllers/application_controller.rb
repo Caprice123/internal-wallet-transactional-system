@@ -52,7 +52,7 @@ class ApplicationController < ActionController::API
       if %w[application/vnd.openxmlformats-officedocument.spreadsheetml.sheet pdf].include?(payload[:params][:format])
         nil
       else
-        JSON.parse(response.body)&.filtered.to_s[0..10_000]
+        JSON.parse(response.body)
       end
   end
 end

@@ -4,9 +4,13 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  resources :session, only: %i[] do
-    collection do
-      post "/login", to: "sessions#login"
+  namespace :api do
+    namespace :v1 do
+      resources :session, only: %i[] do
+        collection do
+          post "/login", to: "sessions#login"
+        end
+      end
     end
   end
 end

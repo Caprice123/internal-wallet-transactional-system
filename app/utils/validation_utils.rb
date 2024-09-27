@@ -4,7 +4,7 @@ module ValidationUtils
       errors = []
       params.permit(required_fields + optional_fields)
 
-      expected.each do |field|
+      required_fields.each do |field|
         errors << "Parameter #{field} wajib diisi}" if params[field].blank?
       end
 

@@ -9,13 +9,15 @@ class Account < ApplicationRecord
   end
 
   def renew_session!
-    self.account_sessions.where(enabled: true).update_all(enabled: false, updated_at: Time.now.in_time_zone("Jakarta"))
+    ActiveRecord::Base.transaction do
+      self.account_sessions.where(enabled: true).update_all(enabled: false, updated_at: Time.now.in_time_zone("Jakarta"))
 
-    AccountSession.create!(
-      user: user,
-      session_id: AccountSession.generate_session_id,
-      expired_at: (Time.now.in_time_zone("Jakarta") + AccountSession.expiration_time_in_minutes.minutes).in_time_zone("Jakarta"),
-      enabled: true,
-    )
+      AccountSession.create!(
+        account: self,
+        session_id: AccountSession.generate_session_id,
+        expired_at: (Time.now.in_time_zone("Jakarta") + AccountSession.expiration_time_in_minutes.minutes).in_time_zone("Jakarta"),
+        enabled: true,
+      )
+    end
   end
 end
