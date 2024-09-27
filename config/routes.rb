@@ -12,6 +12,14 @@ Rails.application.routes.draw do
           post "/logout", to: "sessions#logout"
         end
       end
+
+      namespace :transactions do
+        resources :wallets, only: %i[] do
+          collection do
+            post "/deposit", to: "wallets#deposit"
+          end
+        end
+      end
     end
   end
 end
