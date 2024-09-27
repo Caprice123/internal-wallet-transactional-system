@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       resources :session, only: %i[] do
         collection do
           post "/login", to: "sessions#login"
+          post "/logout", to: "sessions#logout"
         end
       end
     end

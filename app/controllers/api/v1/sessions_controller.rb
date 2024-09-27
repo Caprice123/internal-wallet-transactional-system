@@ -1,4 +1,6 @@
 class Api::V1::SessionsController < Api::V1::BaseController
+  skip_before_action :authenticate_user, only: %i[login]
+
   def login
     ValidationUtils.validate_params(
       params: params,
@@ -13,6 +15,16 @@ class Api::V1::SessionsController < Api::V1::BaseController
     render status: :ok, json: {
       data: {
         sessionId: session_id,
+      },
+    }
+  end
+
+  def logout
+    Authentication::LogoutService.call(account: current_account)
+
+    render status: :ok, json: {
+      data: {
+        status: "ok",
       },
     }
   end

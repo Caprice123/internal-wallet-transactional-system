@@ -25,4 +25,13 @@ module AuthenticationError
       status: :unauthorized,
     )
   end
+
+  class SessionNotFound < HandledError
+    default(
+      title: "Session tidak terdaftar",
+      detail: "Session tidak terdaftar",
+      code: 1000,
+      status: :unauthorized,
+    )
+  end
 end
