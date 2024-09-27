@@ -24,7 +24,7 @@ class Transactions::Wallet::WithdrawService < ApplicationService
       Ledger.create!(
         wallet: wallet,
         transaction_id: credit_transaction.id,
-        amount: @amount,
+        amount: -@amount,
         initial_balance: current_balance,
         updated_balance: wallet.current_balance.to_f,
       )

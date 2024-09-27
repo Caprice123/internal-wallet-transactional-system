@@ -40,7 +40,7 @@ describe Transactions::Wallet::WithdrawService do
       transaction = CreditTransaction.last
       expect(transaction.source_wallet_id).to be_nil
       expect(transaction.target_wallet_id).to eq(wallet.id)
-      expect(transaction.amount).to eq(1)
+      expect(transaction.amount).to eq(-1)
       expect(transaction.type).to eq("CreditTransaction")
 
       ledger = Ledger.last
