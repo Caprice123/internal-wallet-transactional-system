@@ -18,7 +18,7 @@ class Authentication::LoginService < ApplicationService
 
   private def login_via_session(account)
     @session[:account_id] = account.id
-    @session[:expires_at] = (Time.now.in_time_zone("Jakarta") + AccountSession.expiration_time_in_minutes.minutes).in_time_zone("Jakarta")
+    @session[:expired_at] = (Time.now.in_time_zone("Jakarta") + AccountSession.expiration_time_in_minutes.minutes).in_time_zone("Jakarta")
     [nil, "session"]
   end
 

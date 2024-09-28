@@ -10,37 +10,93 @@ describe "api/v1/session", type: :request do
       }
     end
 
-    context "when login service returns session id" do
-      it "returns session id to the user" do
-        expect(Authentication::LoginService).to receive(:call).with(**params).and_return("session-id")
+    context "when authenticaation type is set as token" do
+      context "and login service returns session id" do
+        it "returns session id to the user" do
+          expect(Authentication::LoginService).to receive(:call).with(
+            email: params[:email],
+            password: params[:password],
+            session: anything,
+          ).and_return(%w[session-id Bearer])
 
-        post(url, params: params)
+          post(url, params: params)
 
-        expect(response.code).to eq("200")
-        expect(response_body[:data]).to eq(
-          {
-            sessionId: "session-id",
-          },
-        )
+          expect(response.code).to eq("200")
+          expect(response_body[:data]).to eq(
+            {
+              sessionId: "session-id",
+              authenticationType: "Bearer",
+            },
+          )
+        end
+      end
+
+      context "when login service raises any error" do
+        it "returns error to the user" do
+          expect(Authentication::LoginService).to receive(:call).with(
+            email: params[:email],
+            password: params[:password],
+            session: anything,
+          ).and_raise(AuthenticationError::AccountNotValid)
+
+          post(url, params: params)
+
+          expect(response.code).to eq("401")
+          expect(response_body[:errors]).to eq(
+            [
+              {
+                title: "Account tidak valid",
+                detail: "Account tidak valid",
+                errorCode: 1000,
+              },
+            ],
+          )
+        end
       end
     end
 
-    context "when login service raises any error" do
-      it "returns error to the user" do
-        expect(Authentication::LoginService).to receive(:call).with(**params).and_raise(AuthenticationError::AccountNotValid)
+    context "when authorization type is set as session" do
+      context "and login service returns session id" do
+        it "returns session id to the user" do
+          expect(Authentication::LoginService).to receive(:call).with(
+            email: params[:email],
+            password: params[:password],
+            session: anything,
+          ).and_return([nil, "session"])
 
-        post(url, params: params)
+          post(url, params: params)
 
-        expect(response.code).to eq("401")
-        expect(response_body[:errors]).to eq(
-          [
+          expect(response.code).to eq("200")
+          expect(response_body[:data]).to eq(
             {
-              title: "Account tidak valid",
-              detail: "Account tidak valid",
-              errorCode: 1000,
+              sessionId: nil,
+              authenticationType: "session",
             },
-          ],
-        )
+          )
+        end
+      end
+
+      context "when login service raises any error" do
+        it "returns error to the user" do
+          expect(Authentication::LoginService).to receive(:call).with(
+            email: params[:email],
+            password: params[:password],
+            session: anything,
+          ).and_raise(AuthenticationError::AccountNotValid)
+
+          post(url, params: params)
+
+          expect(response.code).to eq("401")
+          expect(response_body[:errors]).to eq(
+            [
+              {
+                title: "Account tidak valid",
+                detail: "Account tidak valid",
+                errorCode: 1000,
+              },
+            ],
+          )
+        end
       end
     end
   end
@@ -55,7 +111,7 @@ describe "api/v1/session", type: :request do
     end
 
     it "calls logout service to disable all the session tokens" do
-      expect(Authentication::LogoutService).to receive(:call).with(account: account_session.account)
+      expect(Authentication::LogoutService).to receive(:call).with(account: account_session.account, session: anything)
 
       post(url, headers: headers)
 

@@ -12,9 +12,58 @@ describe Api::V1::BaseController, type: :controller do
     end
   end
 
-  describe "#authenticate_account" do
+  describe "#authenticate_account_by_session" do
+    let!(:account) { create(:user_account) }
+
+    before do
+      expect(Rails.application.secrets).to receive(:authentication_system).and_return("session")
+    end
+
+    context "when user have not logged in before" do
+      it "raises error that says empty user access token" do
+        session.clear
+
+        get(:index)
+        expect(response.code).to eq("401")
+        expect(response_body[:errors]).to eq(
+          [
+            {
+              title: "Access token dibutuhkan",
+              detail: "Access token dibutuhkan",
+              errorCode: 1000,
+            },
+          ],
+        )
+      end
+    end
+
+    context "when session already expired" do
+      it "raises error that indicates session already expired" do
+        session[:account_id] = account.id
+        session[:expired_at] = Time.now - 1.minute
+
+        get(:index)
+        expect(response.code).to eq("401")
+        expect(response_body[:errors]).to eq(
+          [
+            {
+              title: "Silakan log in terlebih dahulu",
+              detail: "Silakan log in terlebih dahulu",
+              errorCode: 1000,
+            },
+          ],
+        )
+      end
+    end
+  end
+
+  describe "#authenticate_account_by_token" do
     let!(:account) { create(:user_account) }
     let!(:account_session) { create(:account_session) }
+
+    before do
+      expect(Rails.application.secrets).to receive(:authentication_system).and_return("token")
+    end
 
     context "when there is no authorization header" do
       it "returns error to the user that indicates empty access token" do

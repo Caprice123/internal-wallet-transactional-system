@@ -43,4 +43,13 @@ module AuthenticationError
       status: :unauthorized,
     )
   end
+
+  class AccountNeverLoggedInBefore < HandledError
+    default(
+      title: "Silakan log in terlebih dahulu",
+      detail: "Silakan log in terlebih dahulu",
+      code: 1000,
+      status: :unauthorized,
+    )
+  end
 end
