@@ -13,7 +13,7 @@ class Api::V1::Transactions::WalletsController < Api::V1::BaseController
     render status: :created, json: {
       data: {
         walletId: wallet.id,
-        currentBalance: wallet.current_balance,
+        currentBalance: wallet.current_balance.to_f,
       },
     }
   end
@@ -32,7 +32,7 @@ class Api::V1::Transactions::WalletsController < Api::V1::BaseController
     render status: :created, json: {
       data: {
         walletId: wallet.id,
-        currentBalance: wallet.current_balance,
+        currentBalance: wallet.current_balance.to_f,
       },
     }
   end
@@ -55,7 +55,7 @@ class Api::V1::Transactions::WalletsController < Api::V1::BaseController
     render status: :created, json: {
       data: {
         walletId: wallet.id,
-        currentBalance: wallet.current_balance,
+        currentBalance: wallet.current_balance.to_f,
       },
     }
   end

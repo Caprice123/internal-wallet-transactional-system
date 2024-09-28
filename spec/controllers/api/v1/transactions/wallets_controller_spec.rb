@@ -1,6 +1,7 @@
 describe "api/v1/transactions/wallets", type: :request do
   let(:prefix_url) { "/api/v1/transactions/wallets" }
-  let!(:wallet) { create(:wallet, current_balance: 10) }
+  let!(:wallet) { create(:wallet, balance: 10) }
+  let!(:ledger) { create(:ledger, wallet: wallet, amount: 10) }
   let!(:account_session) { create(:account_session, account: wallet.account) }
 
   describe "#deposit" do
@@ -111,7 +112,7 @@ describe "api/v1/transactions/wallets", type: :request do
 
   describe "#transfer" do
     let!(:url) { "#{prefix_url}/transfer" }
-    let!(:wallet2) { create(:wallet, current_balance: 0) }
+    let!(:wallet2) { create(:wallet, balance: 0) }
     let!(:params) do
       {
         targetWalletId: wallet2.id,

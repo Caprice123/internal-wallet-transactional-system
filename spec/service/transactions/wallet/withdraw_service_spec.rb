@@ -19,7 +19,8 @@ describe Transactions::Wallet::WithdrawService do
 
   context "when wallet current balance is less than the amount that user wants to withdraw" do
     it "raises error that indicates current balance is not enough" do
-      create(:wallet, account: account, current_balance: 5)
+      wallet = create(:wallet, account: account, balance: 5)
+      create(:ledger, wallet: wallet, amount: 5)
 
       expect do
         described_class.call(account: account, amount: 10)
@@ -29,11 +30,12 @@ describe Transactions::Wallet::WithdrawService do
 
   context "when amount is bigger than 0 and user has wallet" do
     it "increments the wallet balance, record the credit transaction and create a ledger regarding that transaction" do
-      wallet = create(:wallet, account: account, current_balance: 10)
+      wallet = create(:wallet, account: account, balance: 10)
+      create(:ledger, wallet: wallet, amount: 10)
 
       expect do
         described_class.call(account: account, amount: 1)
-      end.to change { wallet.reload.current_balance }.from(10).to(9)
+      end.to change { wallet.reload.balance }.from(10).to(9)
         .and change { CreditTransaction.count }.by(1)
         .and change { Ledger.count }.by(1)
 

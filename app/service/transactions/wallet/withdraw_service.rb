@@ -14,7 +14,7 @@ class Transactions::Wallet::WithdrawService < ApplicationService
       current_balance = wallet.current_balance.to_f
       raise Transactions::WalletError::BalanceNotEnough if current_balance - @amount < 0
 
-      wallet.decrement!(:current_balance, @amount)
+      wallet.decrement!(:balance, @amount)
 
       credit_transaction = CreditTransaction.create!(
         target_wallet_id: wallet.id,
@@ -26,7 +26,7 @@ class Transactions::Wallet::WithdrawService < ApplicationService
         transaction_id: credit_transaction.id,
         amount: -@amount,
         initial_balance: current_balance,
-        updated_balance: wallet.current_balance.to_f,
+        updated_balance: current_balance - @amount,
       )
     end
 

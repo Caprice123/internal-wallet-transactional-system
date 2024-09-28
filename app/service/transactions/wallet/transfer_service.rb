@@ -22,8 +22,8 @@ class Transactions::Wallet::TransferService < ApplicationService
       current_balance = wallet.current_balance.to_f
       raise Transactions::WalletError::BalanceNotEnough if current_balance - @amount < 0
 
-      wallet.decrement!(:current_balance, @amount)
-      target_wallet.increment!(:current_balance, @amount)
+      wallet.decrement!(:balance, @amount)
+      target_wallet.increment!(:balance, @amount)
 
       transfer_transaction = TransferTransaction.create!(
         source_wallet_id: wallet.id,
@@ -36,14 +36,14 @@ class Transactions::Wallet::TransferService < ApplicationService
         transaction_id: transfer_transaction.id,
         amount: -@amount,
         initial_balance: current_balance,
-        updated_balance: wallet.current_balance.to_f,
+        updated_balance: current_balance - @amount,
       )
       Ledger.create!(
         wallet: target_wallet,
         transaction_id: transfer_transaction.id,
         amount: @amount,
         initial_balance: target_wallet_current_balance,
-        updated_balance: target_wallet.current_balance.to_f,
+        updated_balance: target_wallet_current_balance + @amount,
       )
     end
 

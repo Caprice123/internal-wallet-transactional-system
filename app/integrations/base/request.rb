@@ -45,10 +45,6 @@ module Base
         @fake_responses ||= HashWithIndifferentAccess.new
       end
 
-      def faz
-        @fake_responses
-      end
-
       def define_response_class(&)
         @response_class = Class.new(Base::Response, &)
       end
@@ -98,15 +94,9 @@ module Base
     end
 
     private def fake_api_hit!(faking_method)
-      raise "Method should not be called in production environment" if Rails.env.worker? || Rails.env.production?
+      raise "Method should not be called in production environment" if Rails.env.production?
 
-      response =
-        case faking_method
-        when Symbol
-          self.class.fake_response(faking_method).call(self)
-        else
-          faking_method.call(self)
-        end
+      response = self.class.fake_response(faking_method).call(self)
       raise "Please ensure the fake response using the #{self.class}.response_class" unless response.is_a?(self.class.response_class)
 
       response

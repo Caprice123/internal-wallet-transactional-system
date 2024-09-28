@@ -13,7 +13,7 @@ class Transactions::Wallet::DepositService < ApplicationService
     wallet.with_lock do
       current_balance = wallet.current_balance.to_f
 
-      wallet.increment!(:current_balance, @amount)
+      wallet.increment!(:balance, @amount)
 
       debit_transaction = DebitTransaction.create!(
         target_wallet_id: wallet.id,
@@ -25,7 +25,7 @@ class Transactions::Wallet::DepositService < ApplicationService
         transaction_id: debit_transaction.id,
         amount: @amount,
         initial_balance: current_balance,
-        updated_balance: wallet.current_balance.to_f,
+        updated_balance: current_balance + @amount,
       )
     end
 

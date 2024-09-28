@@ -41,7 +41,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_27_062510) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["transaction_id"], name: "index_ledgers_on_transaction_id"
-    t.index ["wallet_id"], name: "index_ledgers_on_wallet_id"
+    t.index ["wallet_id", "amount"], name: "index_ledgers_on_wallet_id_and_amount"
   end
 
   create_table "transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -58,10 +58,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_27_062510) do
 
   create_table "wallets", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.decimal "current_balance", precision: 15, scale: 2, default: 0, null: false
+    t.decimal "balance", precision: 10, default: "0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_wallets_on_user_id", unique: true
+    t.index ["account_id"], name: "index_wallets_on_account_id", unique: true
   end
 
 end

@@ -34,4 +34,13 @@ module AuthenticationError
       status: :unauthorized,
     )
   end
+
+  class EmptyUserAccessToken < HandledError
+    default(
+      title: "Access token dibutuhkan",
+      detail: "Access token dibutuhkan",
+      code: 1000,
+      status: :unauthorized,
+    )
+  end
 end
