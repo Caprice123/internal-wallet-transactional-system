@@ -1,9 +1,9 @@
 class Api::V1::BaseController < ApplicationController
-  before_action :authenticate_user
+  before_action :authenticate_account
 
   attr_reader :current_account
 
-  private def authenticate_user
+  private def authenticate_account
     authorization_token = request.headers["Authorization"]
     raise AuthenticationError::EmptyUserAccessToken if authorization_token.blank?
 

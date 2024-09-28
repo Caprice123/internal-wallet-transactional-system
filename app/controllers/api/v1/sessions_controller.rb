@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < Api::V1::BaseController
-  skip_before_action :authenticate_user, only: %i[login]
+  skip_before_action :authenticate_account, only: %i[login]
 
   def login
     ValidationUtils.validate_params(
