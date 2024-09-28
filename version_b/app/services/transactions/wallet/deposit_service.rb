@@ -1,6 +1,7 @@
 class Transactions::Wallet::DepositService < ApplicationService
-  def initialize(account:, amount:)
+  def initialize(account:, target_wallet_id:, amount:)
     @account = account
+    @target_wallet_id = target_wallet_id
     @amount = amount.to_f
   end
 
@@ -10,22 +11,40 @@ class Transactions::Wallet::DepositService < ApplicationService
     wallet = @account.wallet
     raise Transactions::WalletError::WalletNotFound if wallet.blank?
 
-    wallet.with_lock do
+    target_wallet = Wallet.find_by(id: @target_wallet_id)
+    raise Transactions::WalletError::CannotTransactionWithItsOwnWallet if target_wallet.id == wallet.id
+    raise Transactions::WalletError::TargetWalletNotFound if target_wallet.blank?
+
+    ActiveRecord::Base.transaction do
+      wallet.lock!
+      target_wallet.lock!
+
+      target_wallet_current_balance = target_wallet.current_balance.to_f
       current_balance = wallet.current_balance.to_f
+      raise Transactions::WalletError::BalanceNotEnough if current_balance - @amount < 0
 
-      wallet.increment!(:balance, @amount)
+      wallet.decrement!(:balance, @amount)
+      target_wallet.increment!(:balance, @amount)
 
-      debit_transaction = CreditTransaction.create!(
-        target_wallet_id: wallet.id,
+      transfer_transaction = DepositTransaction.create!(
+        source_wallet_id: wallet.id,
+        target_wallet_id: target_wallet.id,
         amount: @amount.to_f,
       )
 
       Ledger.create!(
         wallet: wallet,
-        transaction_id: debit_transaction.id,
-        amount: @amount,
+        transaction_id: transfer_transaction.id,
+        amount: -@amount,
         initial_balance: current_balance,
-        updated_balance: current_balance + @amount,
+        updated_balance: current_balance - @amount,
+      )
+      Ledger.create!(
+        wallet: target_wallet,
+        transaction_id: transfer_transaction.id,
+        amount: @amount,
+        initial_balance: target_wallet_current_balance,
+        updated_balance: target_wallet_current_balance + @amount,
       )
     end
 

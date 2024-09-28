@@ -34,4 +34,13 @@ module Transactions::WalletError
       status: :not_found,
     )
   end
+
+  class CannotTransactionWithItsOwnWallet < HandledError
+    default(
+      title: "Tidak boleh melakukan transaksi ke wallet pribadi",
+      detail: "Tidak boleh melakukan transaksi ke wallet pribadi",
+      code: 1000,
+      status: :bad_request,
+    )
+  end
 end

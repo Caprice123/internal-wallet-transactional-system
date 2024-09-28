@@ -26,6 +26,7 @@ class Api::V1::Transactions::WalletsController < Api::V1::BaseController
 
     wallet = Transactions::Wallet::DepositService.call(
       account: current_account,
+      target_wallet_id: params[:targetWalletid].to_i,
       amount: params[:amount].to_f,
     )
 
