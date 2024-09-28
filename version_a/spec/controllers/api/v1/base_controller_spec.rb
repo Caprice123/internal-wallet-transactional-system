@@ -47,8 +47,8 @@ describe Api::V1::BaseController, type: :controller do
         expect(response_body[:errors]).to eq(
           [
             {
-              title: "Session user telah expired",
-              detail: "Session user telah expired",
+              title: "Silakan log in terlebih dahulu",
+              detail: "Silakan log in terlebih dahulu",
               errorCode: 1000,
             },
           ],

@@ -13,7 +13,7 @@ class Api::V1::BaseController < ApplicationController
 
   private def authenticate_account_by_session
     raise AuthenticationError::EmptyUserAccessToken if session[:account_id].blank?
-    raise AuthenticationError::SessionExpired if Time.now.in_time_zone("Jakarta") > session[:expired_at].in_time_zone("Jakarta")
+    raise AuthenticationError::AccountNeverLoggedInBefore if Time.now.in_time_zone("Jakarta") > session[:expired_at].in_time_zone("Jakarta")
 
     @current_account = Account.find_by(id: session[:account_id])
   end
