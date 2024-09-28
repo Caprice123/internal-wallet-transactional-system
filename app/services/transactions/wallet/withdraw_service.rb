@@ -1,4 +1,4 @@
-class Transactions::Wallet::DepositService < ApplicationService
+class Transactions::Wallet::WithdrawService < ApplicationService
   def initialize(account:, amount:)
     @account = account
     @amount = amount.to_f
@@ -12,20 +12,21 @@ class Transactions::Wallet::DepositService < ApplicationService
 
     wallet.with_lock do
       current_balance = wallet.current_balance.to_f
+      raise Transactions::WalletError::BalanceNotEnough if current_balance - @amount < 0
 
-      wallet.increment!(:balance, @amount)
+      wallet.decrement!(:balance, @amount)
 
-      debit_transaction = DebitTransaction.create!(
+      credit_transaction = DebitTransaction.create!(
         target_wallet_id: wallet.id,
         amount: @amount.to_f,
       )
 
       Ledger.create!(
         wallet: wallet,
-        transaction_id: debit_transaction.id,
-        amount: @amount,
+        transaction_id: credit_transaction.id,
+        amount: -@amount,
         initial_balance: current_balance,
-        updated_balance: current_balance + @amount,
+        updated_balance: current_balance - @amount,
       )
     end
 
