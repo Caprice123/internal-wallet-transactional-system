@@ -57,6 +57,59 @@ describe "api/v1/transactions/wallets", type: :request do
     end
   end
 
+  describe "#topup" do
+    let!(:url) { "#{prefix_url}/topup" }
+    let!(:params) do
+      {
+        amount: 10,
+      }
+    end
+    let!(:headers) do
+      {
+        Authorization: "Bearer #{account_session.session_id}",
+      }
+    end
+
+    context "when topup service returns success" do
+      it "returns session id to the user" do
+        expect(Transactions::Wallet::TopupService).to receive(:call)
+          .with(account: wallet.account, amount: 10)
+          .and_call_original
+
+        post(url, params: params, headers: headers)
+
+        expect(response.code).to eq("201")
+        expect(response_body[:data]).to eq(
+          {
+            walletId: wallet.id,
+            currentBalance: 20,
+          },
+        )
+      end
+    end
+
+    context "when topup service raises any error" do
+      it "returns error to the user" do
+        expect(Transactions::Wallet::TopupService).to receive(:call)
+          .with(account: wallet.account, amount: 10)
+          .and_raise(Transactions::WalletError::AmountMustBeBiggerThanZero)
+
+        post(url, params: params, headers: headers)
+
+        expect(response.code).to eq("400")
+        expect(response_body[:errors]).to eq(
+          [
+            {
+              title: "Amount harus lebih besar dari 0",
+              detail: "Amount harus lebih besar dari 0",
+              errorCode: 1000,
+            },
+          ],
+        )
+      end
+    end
+  end
+
   describe "#withdraw" do
     let!(:url) { "#{prefix_url}/withdraw" }
     let!(:params) do

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       namespace :transactions do
         resources :wallets, only: %i[] do
           collection do
+            post "/topup", to: "wallets#topup"
             post "/deposit", to: "wallets#deposit"
             post "/withdraw", to: "wallets#withdraw"
             post "/transfer", to: "wallets#transfer"
