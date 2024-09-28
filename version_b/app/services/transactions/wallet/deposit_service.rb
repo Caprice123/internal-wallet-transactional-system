@@ -12,8 +12,8 @@ class Transactions::Wallet::DepositService < ApplicationService
     raise Transactions::WalletError::WalletNotFound if wallet.blank?
 
     target_wallet = Wallet.find_by(id: @target_wallet_id)
-    raise Transactions::WalletError::CannotTransactionWithItsOwnWallet if target_wallet.id == wallet.id
     raise Transactions::WalletError::TargetWalletNotFound if target_wallet.blank?
+    raise Transactions::WalletError::CannotTransactionWithItsOwnWallet if target_wallet.id == wallet.id
 
     ActiveRecord::Base.transaction do
       wallet.lock!
@@ -26,7 +26,7 @@ class Transactions::Wallet::DepositService < ApplicationService
       wallet.decrement!(:balance, @amount)
       target_wallet.increment!(:balance, @amount)
 
-      transfer_transaction = DepositTransaction.create!(
+      deposit_transaction = DepositTransaction.create!(
         source_wallet_id: wallet.id,
         target_wallet_id: target_wallet.id,
         amount: @amount.to_f,
@@ -34,14 +34,14 @@ class Transactions::Wallet::DepositService < ApplicationService
 
       Ledger.create!(
         wallet: wallet,
-        transaction_id: transfer_transaction.id,
+        transaction_id: deposit_transaction.id,
         amount: -@amount,
         initial_balance: current_balance,
         updated_balance: current_balance - @amount,
       )
       Ledger.create!(
         wallet: target_wallet,
-        transaction_id: transfer_transaction.id,
+        transaction_id: deposit_transaction.id,
         amount: @amount,
         initial_balance: target_wallet_current_balance,
         updated_balance: target_wallet_current_balance + @amount,

@@ -1,2 +1,2 @@
-class DebitTransaction < Transaction
+class TopupTransaction < Transaction
 end

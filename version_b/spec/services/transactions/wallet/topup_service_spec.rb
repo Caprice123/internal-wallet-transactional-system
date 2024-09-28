@@ -13,7 +13,7 @@ describe Transactions::Wallet::TopupService do
     it "raises error that indicates other than user account may not topup" do
       account2 = create(:team_account)
       expect do
-        described_class.call(account: account2, amount: -1)
+        described_class.call(account: account2, amount: 1)
       end.to raise_error(TransactionError::UnallowedUserToDoTopup)
     end
   end
