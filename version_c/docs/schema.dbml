@@ -1,0 +1,75 @@
+Table account_sessions {
+  id bigint [pk]
+  account_id bigint [not null]
+  session_id varchar [not null]
+  expired_at datetime [not null]
+  enabled boolean [default: true, not null]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    account_id enabled
+    session_id [unique]
+  }
+}
+
+Table accounts {
+  id bigint [pk]
+  name varchar [not null]
+  email varchar [not null, unique]
+  password_digest varchar [not null]
+  type varchar [not null]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+}
+
+Table ledgers {
+  id bigint [pk]
+  wallet_id bigint [not null]
+  transaction_id bigint [not null]
+  amount decimal(15,2) [not null]
+  initial_balance decimal(15,2) [not null]
+  updated_balance decimal(15,2) [not null]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    wallet_id amount
+    transaction_id
+  }
+}
+
+Table transactions {
+  id bigint [pk]
+  source_wallet_id bigint
+  target_wallet_id bigint
+  amount decimal(15,2) [not null]
+  type varchar [not null]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    source_wallet_id type
+    target_wallet_id type
+    type
+  }
+}
+
+Table wallets {
+  id bigint [pk]
+  account_id bigint [not null]
+  balance decimal(10,2) [default: 0, not null]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    account_id [unique]
+  }
+}
+
+Ref: account_sessions.account_id > accounts.id
+Ref: ledgers.wallet_id > wallets.id
+Ref: ledgers.transaction_id > transactions.id
+Ref: transactions.source_wallet_id > wallets.id
+Ref: transactions.target_wallet_id > wallets.id
+Ref: wallets.account_id > accounts.id
