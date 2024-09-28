@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_27_062510) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id", "enabled"], name: "index_account_sessions_on_account_id_and_enabled"
-    t.index ["session_id"], name: "index_account_sessions_on_session_id"
+    t.index ["session_id"], name: "index_account_sessions_on_session_id", unique: true
   end
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

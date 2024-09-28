@@ -2,7 +2,7 @@ class CreateTableAccountSessions < ActiveRecord::Migration[7.0]
   def change
     create_table :account_sessions do |t|
       t.bigint :account_id, null: false
-      t.string :session_id, null: false, index: true
+      t.string :session_id, null: false, index: { unique: true }
       t.datetime :expired_at, null: false
       t.boolean :enabled, null: false, default: true
 
