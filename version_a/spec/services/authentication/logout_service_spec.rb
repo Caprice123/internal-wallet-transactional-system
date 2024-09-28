@@ -12,7 +12,7 @@ describe Authentication::LogoutService do
 
     it "disables all current account sessions" do
       expect do
-        described_class.call(account: account_session.account, session: { account_id: 1, expires_at: Time.now + 30.minutes })
+        described_class.call(account: account_session.account, session: { account_id: 1, expired_at: Time.now + 30.minutes })
       end.to change { account_session.reload.enabled }.from(true).to(false)
     end
   end
@@ -24,7 +24,7 @@ describe Authentication::LogoutService do
 
     it "doesn't disable all current account sessions" do
       expect do
-        described_class.call(account: account_session.account, session: { account_id: 1, expires_at: Time.now + 30.minutes })
+        described_class.call(account: account_session.account, session: { account_id: 1, expired_at: Time.now + 30.minutes })
       end.to_not change { account_session.reload.enabled }.from(true)
     end
   end

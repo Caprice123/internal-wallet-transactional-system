@@ -90,7 +90,7 @@ describe Authentication::LoginService do
         expect(session_id).to be_nil
         expect(authentication_type).to eq("session")
         expect(session[:account_id]).to eq(account.id)
-        expect(session[:expires_at].in_time_zone("Jakarta")).to eq((Time.now.in_time_zone("Jakarta") + AccountSession.expiration_time_in_minutes.minutes).in_time_zone("Jakarta"))
+        expect(session[:expired_at].in_time_zone("Jakarta")).to eq((Time.now.in_time_zone("Jakarta") + AccountSession.expiration_time_in_minutes.minutes).in_time_zone("Jakarta"))
       end
     end
 
@@ -100,14 +100,14 @@ describe Authentication::LoginService do
 
         session = {
           account_id: 5,
-          expires_at: Time.now + 15.minutes,
+          expired_at: Time.now + 15.minutes,
         }
         session_id, authentication_type = described_class.call(email: account.email, password: "password", session: session)
 
         expect(session_id).to be_nil
         expect(authentication_type).to eq("session")
         expect(session[:account_id]).to eq(account.id)
-        expect(session[:expires_at].in_time_zone("Jakarta")).to eq((Time.now.in_time_zone("Jakarta") + AccountSession.expiration_time_in_minutes.minutes).in_time_zone("Jakarta"))
+        expect(session[:expired_at].in_time_zone("Jakarta")).to eq((Time.now.in_time_zone("Jakarta") + AccountSession.expiration_time_in_minutes.minutes).in_time_zone("Jakarta"))
       end
     end
   end
