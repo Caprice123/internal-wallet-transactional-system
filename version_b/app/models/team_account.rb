@@ -1,0 +1,2 @@
+class TeamAccount < Account
+end
