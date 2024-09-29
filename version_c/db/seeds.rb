@@ -17,26 +17,14 @@ class Seeder
 
     private def seed_mock_accounts
       3.times do |i|        
-        user_account = UserAccount.create!(
-          name: "user account #{i}",
-          email: "useraccount#{i}@gmail.com",
+        account = Account.create!(
+          name: "account #{i}",
+          email: "account#{i}@gmail.com",
           password: "password",
         )
-        Wallet.create!(account: user_account)
-
-        team_account = TeamAccount.create!(
-          name: "team account #{i}",
-          email: "teamaccount#{i}@gmail.com",
-          password: "password",
-        )
-        Wallet.create!(account: team_account)
-
-        stock_account = StockAccount.create!(
-          name: "stock account #{i}",
-          email: "stockaccount#{i}@gmail.com",
-          password: "password",
-        )
-        Wallet.create!(account: stock_account)
+        UserWallet.create!(account: account)
+        TeamWallet.create!(account: account)
+        StockWallet.create!(account: account)
       end
     end
   end

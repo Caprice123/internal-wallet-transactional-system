@@ -34,4 +34,13 @@ module Transactions::WalletError
       status: :not_found,
     )
   end
+
+  class CannotTransactToOthersWallet < HandledError
+    default(
+      title: "Wallet bukan milik akun tersebut",
+      detail: "Wallet bukan milik akun tersebut",
+      code: 1000,
+      status: :bad_request,
+    )
+  end
 end

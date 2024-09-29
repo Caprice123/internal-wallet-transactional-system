@@ -18,7 +18,6 @@ Rails.application.routes.draw do
           collection do
             post "/deposit", to: "wallets#deposit"
             post "/withdraw", to: "wallets#withdraw"
-            post "/transfer", to: "wallets#transfer"
           end
         end
       end

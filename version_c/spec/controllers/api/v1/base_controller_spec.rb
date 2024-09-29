@@ -13,7 +13,7 @@ describe Api::V1::BaseController, type: :controller do
   end
 
   describe "#authenticate_account_by_session" do
-    let!(:account) { create(:user_account) }
+    let!(:account) { create(:account) }
 
     before do
       expect(Rails.application.secrets).to receive(:authentication_system).and_return("session")
@@ -58,7 +58,7 @@ describe Api::V1::BaseController, type: :controller do
   end
 
   describe "#authenticate_account_by_token" do
-    let!(:account) { create(:user_account) }
+    let!(:account) { create(:account) }
     let!(:account_session) { create(:account_session) }
 
     before do

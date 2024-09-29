@@ -4,12 +4,7 @@ class Account < ApplicationRecord
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "email tidak valid" }
 
   has_many :account_sessions
-  has_one :wallet
-
-  def initialize(*args)
-    raise "Cannot directly instantiate an abstract class #{self.class}" if self.instance_of?(Account)
-    super
-  end
+  has_many :wallets
 
   def renew_session!
     ActiveRecord::Base.transaction do

@@ -1,14 +1,16 @@
 class Transactions::Wallet::WithdrawService < ApplicationService
-  def initialize(account:, amount:)
+  def initialize(account:, source_wallet_id:, amount:)
     @account = account
+    @source_wallet_id = source_wallet_id
     @amount = amount.to_f
   end
 
   def call
     raise Transactions::WalletError::AmountMustBeBiggerThanZero if @amount <= 0
 
-    wallet = @account.wallet
+    wallet = Wallet.find_by(id: @source_wallet_id)
     raise Transactions::WalletError::WalletNotFound if wallet.blank?
+    raise Transactions::WalletError::CannotTransactToOthersWallet unless wallet.account_id == @account.id
 
     wallet.with_lock do
       current_balance = wallet.current_balance.to_f

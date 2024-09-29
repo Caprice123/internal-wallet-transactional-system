@@ -1,0 +1,2 @@
+class StockWallet < Wallet
+end

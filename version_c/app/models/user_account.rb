@@ -1,2 +1,0 @@
-class UserAccount < Account
-end

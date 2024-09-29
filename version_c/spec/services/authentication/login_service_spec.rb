@@ -1,5 +1,5 @@
 describe Authentication::LoginService do
-  let!(:account) { create(:user_account) }
+  let!(:account) { create(:account) }
 
   before do
     travel_to Time.parse("2024-09-27 00:00:00 +07:00")

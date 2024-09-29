@@ -26,7 +26,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_27_062510) do
     t.string "name", null: false
     t.string "email", null: false
     t.string "password_digest", null: false
-    t.string "type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_accounts_on_email", unique: true
@@ -59,8 +58,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_27_062510) do
   create_table "wallets", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.decimal "balance", precision: 10, default: "0", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "type", null: false
     t.index ["account_id"], name: "index_wallets_on_account_id", unique: true
   end
 

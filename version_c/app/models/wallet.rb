@@ -5,6 +5,12 @@ class Wallet < ApplicationRecord
 
   has_many :ledgers
 
+  def initialize(*args)
+    raise "Cannot directly instantiate an abstract class #{self.class}" if self.instance_of?(Wallet)
+    super
+  end
+
+
   def current_balance
     if Rails.application.secrets.use_database_column?
       self.balance

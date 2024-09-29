@@ -1,2 +1,0 @@
-class StockAccount < Account
-end

@@ -1,2 +1,0 @@
-class TeamAccount < Account
-end

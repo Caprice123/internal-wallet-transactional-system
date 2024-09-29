@@ -1,2 +1,0 @@
-class TransferTransaction < Transaction
-end
