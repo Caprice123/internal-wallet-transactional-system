@@ -1,4 +1,6 @@
 class Authentication::LoginService < ApplicationService
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+
   def initialize(email:, password:, session:)
     @email = email
     @password = password
@@ -6,6 +8,8 @@ class Authentication::LoginService < ApplicationService
   end
 
   def call
+    raise AuthenticationError::EmailNotValid if @email.blank? || !@email.match?(VALID_EMAIL_REGEX)
+
     account = Account.find_by(email: @email)
     raise AuthenticationError::AccountNotValid if account.blank?
 

@@ -1,4 +1,13 @@
 module AuthenticationError
+  class EmailNotValid < HandledError
+    default(
+      title: "Email tidak valid",
+      detail: "Email tidak valid",
+      code: 1000,
+      status: :bad_request,
+    )
+  end
+
   class AccountNotValid < HandledError
     default(
       title: "Account tidak valid",

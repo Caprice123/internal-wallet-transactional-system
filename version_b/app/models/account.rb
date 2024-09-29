@@ -1,5 +1,8 @@
 class Account < ApplicationRecord
   has_secure_password
+
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "email tidak valid" }
+
   has_many :account_sessions
   has_one :wallet
 

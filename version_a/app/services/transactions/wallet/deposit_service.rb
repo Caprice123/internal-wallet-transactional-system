@@ -15,14 +15,14 @@ class Transactions::Wallet::DepositService < ApplicationService
 
       wallet.increment!(:balance, @amount)
 
-      debit_transaction = CreditTransaction.create!(
+      deposit_transaction = DepositTransaction.create!(
         target_wallet_id: wallet.id,
         amount: @amount.to_f,
       )
 
       Ledger.create!(
         wallet: wallet,
-        transaction_id: debit_transaction.id,
+        transaction_id: deposit_transaction.id,
         amount: @amount,
         initial_balance: current_balance,
         updated_balance: current_balance + @amount,

@@ -16,14 +16,14 @@ class Transactions::Wallet::WithdrawService < ApplicationService
 
       wallet.decrement!(:balance, @amount)
 
-      credit_transaction = DebitTransaction.create!(
+      withdraw_transaction = WithdrawTransaction.create!(
         target_wallet_id: wallet.id,
         amount: @amount.to_f,
       )
 
       Ledger.create!(
         wallet: wallet,
-        transaction_id: credit_transaction.id,
+        transaction_id: withdraw_transaction.id,
         amount: -@amount,
         initial_balance: current_balance,
         updated_balance: current_balance - @amount,

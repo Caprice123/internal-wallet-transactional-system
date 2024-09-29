@@ -5,10 +5,18 @@ describe Authentication::LoginService do
     travel_to Time.parse("2024-09-27 00:00:00 +07:00")
   end
 
+  context "when email is not valid email" do
+    it "raises error that indicates email is not valid" do
+      expect do
+        described_class.call(email: "email", password: "password", session: {})
+      end.to raise_error(AuthenticationError::EmailNotValid)
+    end
+  end
+
   context "when account is not found" do
     it "raises error that indicates user is not valid" do
       expect do
-        described_class.call(email: "email", password: "password", session: {})
+        described_class.call(email: "email@gmail.com", password: "password", session: {})
       end.to raise_error(AuthenticationError::AccountNotValid)
     end
   end
