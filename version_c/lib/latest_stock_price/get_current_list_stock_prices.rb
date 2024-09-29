@@ -9,8 +9,7 @@ module LatestStockPrice
         response = RapidApi::Client.get_list_stock_prices(isin)
         response.raise_error_if_needed!
 
-        stock_details = response.parsed_body
-        map_isin_to_stock_details(isin_arrays, stock_details)
+        response.parsed_body
       end
 
       private def parsed_isin(isin)
@@ -20,18 +19,6 @@ module LatestStockPrice
         else
           isin.to_s
         end
-      end
-
-      private def map_isin_to_stock_details(isin_arrays, stock_details)
-        mappings = HashWithIndifferentAccess.new
-        isin_arrays.each { |i| mappings[i] = nil }
-
-        stock_details&.each do |stock|
-          stock_isin = stock[:ISIN]
-          mappings[stock_isin] = stock if isin_arrays.include?(stock_isin)
-        end
-
-        mappings
       end
     end
   end

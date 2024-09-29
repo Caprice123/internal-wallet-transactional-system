@@ -13,40 +13,30 @@ describe LatestStockPrice::GetCurrentListStockPrices do
 
     it "returns the stock data" do
       expect(subject).to eq(
-        {
-          "INE758T01015" => {
-            "Symbol" => "ZOMA.NS",
-            "Date/Time" => "2024-09-26T13:42:14.000+05:30",
-            "Total Volume" => 24_906_431,
-            "Net Change" => -6.25,
-            "LTP" => 279.15,
-            "Volume" => 8004,
-            "High" => 285.9,
-            "Low" => 278.55,
-            "Open" => 285.4,
-            "P Close" => 285.4,
-            "Name" => "Zomato Ltd.",
-            "52Wk High" => 298.25,
-            "52Wk Low" => 98.5,
-            "5Year High" => 298.25,
-            "ISIN" => "INE758T01015",
-            "NSE Symbol" => "ZOMATO",
-            "1M High" => 298.25,
-            "3M High" => 298.25,
-            "6M High" => 298.25,
-            "%Chng" => -2.19,
+        [
+          {
+            "Symbol": "ZOMA.NS",
+            "Date/Time": "2024-09-26T13:42:14.000+05:30",
+            "Total Volume": 24_906_431,
+            "Net Change": -6.25,
+            "LTP": 279.15,
+            "Volume": 8004,
+            "High": 285.9,
+            "Low": 278.55,
+            "Open": 285.4,
+            "P Close": 285.4,
+            "Name": "Zomato Ltd.",
+            "52Wk High": 298.25,
+            "52Wk Low": 98.5,
+            "5Year High": 298.25,
+            "ISIN": "INE758T01015",
+            "NSE Symbol": "ZOMATO",
+            "1M High": 298.25,
+            "3M High": 298.25,
+            "6M High": 298.25,
+            "%Chng": -2.19,
           },
-
-        },
-      )
-    end
-
-    it "returns nil as the stock data if it is not found in third party" do
-      response = described_class.call(["STOCK"])
-      expect(response).to eq(
-        {
-          "STOCK" => nil,
-        },
+        ],
       )
     end
   end

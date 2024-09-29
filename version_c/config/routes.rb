@@ -16,6 +16,13 @@ Rails.application.routes.draw do
             post "/withdraw", to: "wallets#withdraw"
           end
         end
+
+        resources :stocks, only: %i[] do
+          collection do
+            get "/", to: "stocks#index"
+            get "/:stockIsin", to: "stocks#show"
+          end
+        end
       end
     end
   end
