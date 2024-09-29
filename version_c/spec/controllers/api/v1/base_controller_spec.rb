@@ -19,8 +19,8 @@ describe Api::V1::BaseController, type: :controller do
       expect(Rails.application.secrets).to receive(:authentication_system).and_return("session")
     end
 
-    context "when user have not logged in before" do
-      it "raises error that says empty user access token" do
+    context "when have not logged in before" do
+      it "raises error that says empty access token" do
         session.clear
 
         get(:index)
@@ -66,7 +66,7 @@ describe Api::V1::BaseController, type: :controller do
     end
 
     context "when there is no authorization header" do
-      it "returns error to the user that indicates empty access token" do
+      it "returns error that indicates empty access token" do
         get(:index)
         expect(response.code).to eq("401")
         expect(response_body[:errors]).to eq(
@@ -82,7 +82,7 @@ describe Api::V1::BaseController, type: :controller do
     end
 
     context "when bearer token is empty" do
-      it "returns error to the user that indicates empty access token" do
+      it "returns error that indicates empty access token" do
         @request.headers["Authorization"] = ""
         get(:index)
         expect(response.code).to eq("401")
@@ -99,7 +99,7 @@ describe Api::V1::BaseController, type: :controller do
     end
 
     context "when session is not a valid session" do
-      it "returns error to the user that session not found" do
+      it "returns error that session not found" do
         @request.headers["Authorization"] = "Bearer test"
         get(:index)
         expect(response.code).to eq("401")
@@ -116,7 +116,7 @@ describe Api::V1::BaseController, type: :controller do
     end
 
     context "when session is already disabled" do
-      it "returns error to the user that session already expired" do
+      it "returns error that session already expired" do
         account_session.update!(enabled: false)
         @request.headers["Authorization"] = "Bearer #{account_session.session_id}"
         get(:index)
@@ -124,8 +124,8 @@ describe Api::V1::BaseController, type: :controller do
         expect(response_body[:errors]).to eq(
           [
             {
-              title: "Session user telah expired",
-              detail: "Session user telah expired",
+              title: "Session telah expired",
+              detail: "Session telah expired",
               errorCode: 1000,
             },
           ],
@@ -133,8 +133,8 @@ describe Api::V1::BaseController, type: :controller do
       end
     end
 
-    context "when user is already pass the expiration session id" do
-      it "returns error to the user that session already expired" do
+    context "when session already expired" do
+      it "returns error that session already expired" do
         account_session.update!(expired_at: Time.now - 1.day)
         @request.headers["Authorization"] = "Bearer #{account_session.session_id}"
         get(:index)
@@ -142,8 +142,8 @@ describe Api::V1::BaseController, type: :controller do
         expect(response_body[:errors]).to eq(
           [
             {
-              title: "Session user telah expired",
-              detail: "Session user telah expired",
+              title: "Session telah expired",
+              detail: "Session telah expired",
               errorCode: 1000,
             },
           ],

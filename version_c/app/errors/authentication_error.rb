@@ -1,4 +1,13 @@
 module AuthenticationError
+  class EmailNotValid < HandledError
+    default(
+      title: "Email tidak valid",
+      detail: "Email tidak valid",
+      code: 1000,
+      status: :bad_request,
+    )
+  end
+
   class AccountNotValid < HandledError
     default(
       title: "Account tidak valid",
@@ -19,8 +28,8 @@ module AuthenticationError
 
   class SessionExpired < HandledError
     default(
-      title: "Session user telah expired",
-      detail: "Session user telah expired",
+      title: "Session telah expired",
+      detail: "Session telah expired",
       code: 1000,
       status: :unauthorized,
     )

@@ -9,15 +9,15 @@ describe Transactions::Wallet::DepositService do
     end
   end
 
-  context "when user doesn't have any wallet" do
-    it "raises error that indicatess user currently don't have any wallet" do
+  context "when account doesn't have any wallet" do
+    it "raises error that indicates that account currently don't have any wallet" do
       expect do
         described_class.call(account: account, amount: 1)
       end.to raise_error(Transactions::WalletError::WalletNotFound)
     end
   end
 
-  context "when amount is bigger than 0 and user has wallet" do
+  context "when amount is bigger than 0 and account has wallet" do
     it "increments the wallet balance, record the debit transaction and create a ledger regarding that transaction" do
       wallet = create(:wallet, account: account)
 

@@ -1,2 +1,0 @@
-class CreditTransaction < Transaction
-end

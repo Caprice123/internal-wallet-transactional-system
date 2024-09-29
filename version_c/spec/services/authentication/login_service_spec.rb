@@ -5,10 +5,18 @@ describe Authentication::LoginService do
     travel_to Time.parse("2024-09-27 00:00:00 +07:00")
   end
 
-  context "when account is not found" do
-    it "raises error that indicates user is not valid" do
+  context "when email is not valid email" do
+    it "raises error that indicates email is not valid" do
       expect do
         described_class.call(email: "email", password: "password", session: {})
+      end.to raise_error(AuthenticationError::EmailNotValid)
+    end
+  end
+
+  context "when account is not found" do
+    it "raises error that indicates account is not valid" do
+      expect do
+        described_class.call(email: "email@gmail.com", password: "password", session: {})
       end.to raise_error(AuthenticationError::AccountNotValid)
     end
   end
@@ -28,8 +36,8 @@ describe Authentication::LoginService do
       expect(Rails.application.secrets).to receive(:authentication_system).and_return("token")
     end
 
-    context "and user credential is matched" do
-      context "and user haven't logged in" do
+    context "and credential is matched" do
+      context "and haven't logged in" do
         it "returns new session id and creates a new session id" do
           expect_any_instance_of(Account).to receive(:authenticate).with("password").and_return(true)
 
@@ -50,7 +58,7 @@ describe Authentication::LoginService do
         end
       end
 
-      context "and user has logged in before" do
+      context "and has logged in before" do
         it "returns new session id and disable the old session id" do
           account_session = create(:account_session, account: account)
           expect_any_instance_of(Account).to receive(:authenticate).with("password").and_return(true)
@@ -80,7 +88,7 @@ describe Authentication::LoginService do
       expect(Rails.application.secrets).to receive(:authentication_system).and_return("session")
     end
 
-    context "and user haven't logged in" do
+    context "and haven't logged in" do
       it "returns new session id and creates a new session id" do
         expect_any_instance_of(Account).to_not receive(:authenticate)
 
@@ -94,7 +102,7 @@ describe Authentication::LoginService do
       end
     end
 
-    context "and user has logged in before" do
+    context "and has logged in before" do
       it "returns new session id and disable the old session id" do
         expect_any_instance_of(Account).to_not receive(:authenticate)
 

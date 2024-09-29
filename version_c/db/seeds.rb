@@ -11,7 +11,7 @@ class Seeder
       # safeguard the seeds from being ran in prod
       return unless Rails.env.development?
 
-      # add user
+      # add account
       seed_mock_accounts
     end
 
