@@ -1,4 +1,4 @@
-# Internal Wallet Transactional System API (Version A)
+# Internal Wallet Transactional System API (Version B)
 
 This project implements an internal wallet transactional system that handles topup to our own wallet, deposits and withdrawals from our current wallet to team and stock aaccounts. It also includes custom authentication for managing sessions and a library for retrieving stock prices.
 
