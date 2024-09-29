@@ -1,24 +1,76 @@
-# README
+# Internal Wallet Transactional System API (Version A)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This project implements an internal wallet transactional system that handles deposits and withdrawals to our own wallets (user, team, or stock wallet). It also includes custom authentication for managing sessions and a library for retrieving stock prices.
 
-Things you may want to cover:
+## Pre-requisites
+- Ruby 3.3.0
+- Mysql 8.3.0
+- Bundler and Rails
 
-* Ruby version
+## How to start the server?
+1. Install all current dependencies
+    ```
+    gem install bundler -v 2.5.7
+    bundle install
+    ```
 
-* System dependencies
+2. Run this command to create the database, migrate the database and seed the database
+    ```
+    rails db:create db:migrate db:seed
+    ```
 
-* Configuration
+3. Run server
+    ```
+    rails s
+    ```
 
-* Database creation
+## How to run test?
 
-* Database initialization
+1. Run this command to migrate the database for the test environment
+    ```
+    RAILS_ENV=test rails db:migrate
+    ```
 
-* How to run the test suite
+2. Start the spring test
+    ```
+    spring rspec <path-to-test-file>
+    ```
 
-* Services (job queues, cache servers, search engines, etc.)
+## Configuration: Environment Secrets
 
-* Deployment instructions
+This application requires various environment variables for connecting to external services and databases. These variables are defined in a secret configuration file and injected via environment variables.
 
-* ...
+The file is structured in different environments, including `development`, `test`, and `production`, each inheriting from a common base.
+
+### Required Environment Variables
+
+Ensure the following environment variables are set:
+
+| Environment Variable   | Description                                        | Default (Development) | Default (Test) |
+|------------------------|----------------------------------------------------|-----------------------|----------------|
+| `DB_HOST`              | The host of your database server.                  | `127.0.0.1`           | `127.0.0.1`    |
+| `DB_NAME`              | The name of your database.                         | `localhost`             | `localhost`      |
+| `DB_USERNAME`          | The username for your database.                    | `root`                | `root`         |
+| `DB_PASSWORD`          | The password for your database.                    | `root`                | `root`         |
+| `DB_POOL`              | The database connection pool size.                 | `30`                  |                |
+| `RAPIDAPI_BASE_URL`     | The base URL for RapidAPI requests.                | *(required)*          | *(required)*   |
+| `RAPIDAPI_KEY`          | Your RapidAPI key for authentication.              | *(required)*          | *(required)*   |
+| `RAPIDAPI_HOST`         | The host for RapidAPI services.                    | *(required)*          | *(required)*   |
+
+### Example Setup
+
+To get started quickly, create a `.env` file in the root of your project or set the environment variables directly in your hosting environment.
+
+```bash
+# .env file for Development
+
+DB_HOST=127.0.0.1
+DB_NAME=my_database
+DB_USERNAME=root
+DB_PASSWORD=root
+DB_POOL=30
+
+RAPIDAPI_BASE_URL=https://api.example.com
+RAPIDAPI_KEY=your-rapidapi-key
+RAPIDAPI_HOST=example-host
+```
