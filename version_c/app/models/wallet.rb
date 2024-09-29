@@ -12,7 +12,7 @@ class Wallet < ApplicationRecord
 
 
   def current_balance
-    if Rails.application.secrets.use_database_column?
+    if Rails.application.secrets.use_wallet_balance_column?
       self.balance
     else
       self.ledgers.sum(:amount)
