@@ -20,7 +20,7 @@ describe Api::V1::BaseController, type: :controller do
     end
 
     context "when account have not logged in before" do
-      it "raises error that says empty access token" do
+      it "raises error that says empty session data" do
         session.clear
 
         get(:index)
@@ -28,8 +28,8 @@ describe Api::V1::BaseController, type: :controller do
         expect(response_body[:errors]).to eq(
           [
             {
-              title: "Access token dibutuhkan",
-              detail: "Access token dibutuhkan",
+              title: "Session data kosong",
+              detail: "Session data kosong",
               errorCode: 1000,
             },
           ],

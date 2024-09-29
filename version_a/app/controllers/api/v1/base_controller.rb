@@ -12,7 +12,7 @@ class Api::V1::BaseController < ApplicationController
   end
 
   private def authenticate_account_by_session
-    raise AuthenticationError::EmptyUserAccessToken if session[:account_id].blank?
+    raise AuthenticationError::EmptySessionData if session[:account_id].blank?
     raise AuthenticationError::AccountNeverLoggedInBefore if Time.now.in_time_zone("Jakarta") > session[:expired_at].in_time_zone("Jakarta")
 
     @current_account = Account.find_by(id: session[:account_id])
@@ -20,10 +20,10 @@ class Api::V1::BaseController < ApplicationController
 
   private def authenticate_account_by_token
     authorization_token = request.headers["Authorization"]
-    raise AuthenticationError::EmptyUserAccessToken if authorization_token.blank?
+    raise AuthenticationError::EmptyAccessToken if authorization_token.blank?
 
     session_id = authorization_token.split.last
-    raise AuthenticationError::EmptyUserAccessToken if session_id.blank?
+    raise AuthenticationError::EmptyAccessToken if session_id.blank?
 
     account_session = AccountSession.find_by(session_id: session_id)
     raise AuthenticationError::SessionNotFound if account_session.blank?

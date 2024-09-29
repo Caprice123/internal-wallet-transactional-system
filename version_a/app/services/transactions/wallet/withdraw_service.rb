@@ -14,12 +14,12 @@ class Transactions::Wallet::WithdrawService < ApplicationService
       current_balance = wallet.current_balance.to_f
       raise Transactions::WalletError::BalanceNotEnough if current_balance - @amount < 0
 
-      wallet.decrement!(:balance, @amount)
-
       withdraw_transaction = WithdrawTransaction.create!(
         target_wallet_id: wallet.id,
         amount: @amount.to_f,
       )
+
+      wallet.decrement!(:balance, @amount)
 
       Ledger.create!(
         wallet: wallet,

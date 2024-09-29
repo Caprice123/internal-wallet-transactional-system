@@ -53,6 +53,15 @@ module AuthenticationError
     )
   end
 
+  class EmptySessionData < HandledError
+    default(
+      title: "Session data kosong",
+      detail: "Session data kosong",
+      code: 1000,
+      status: :unauthorized,
+    )
+  end
+
   class AccountNeverLoggedInBefore < HandledError
     default(
       title: "Silakan log in terlebih dahulu",

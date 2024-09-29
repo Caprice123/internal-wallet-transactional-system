@@ -7,10 +7,10 @@ class Api::V1::Transactions::StocksController < Api::V1::BaseController
     )
 
     stocks = if params[:stockIsins].present?
-      LatestStockPrice::GetCurrentListStockPrices.call(params[:stockIsins])
-    else
-      LatestStockPrice::GetListAllStockPrices.call
-    end
+               LatestStockPrice::GetCurrentListStockPrices.call(params[:stockIsins])
+             else
+               LatestStockPrice::GetListAllStockPrices.call
+             end
 
     render status: :created, json: {
       data: stocks,

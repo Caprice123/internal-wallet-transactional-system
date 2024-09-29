@@ -18,11 +18,11 @@ class ApplicationController < ActionController::API
 
   private def handle_unknown_error(error)
     @error = "#{error.class}: #{error}"
-    if %w[Net::ReadTimeout Net::OpenTimeout].include?(error.class)
-      error_status = :bad_gateway
-    else
-      error_status = :internal_server_error
-    end
+    error_status = if %w[Net::ReadTimeout Net::OpenTimeout].include?(error.class)
+                     :bad_gateway
+                   else
+                     :internal_server_error
+                   end
 
     render status: error_status, json: {
       errors: [

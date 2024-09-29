@@ -10,7 +10,6 @@ class Wallet < ApplicationRecord
     super
   end
 
-
   def current_balance
     if Rails.application.secrets.use_wallet_balance_column?
       self.balance

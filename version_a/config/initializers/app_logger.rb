@@ -44,7 +44,7 @@ class AppLogger
           "[id.#{Rails.env}] " \
           "[#{severity[0]}] " \
           "#{string_message}\n"
-      rescue StandardError => e
+      rescue StandardError
       end
     end
 

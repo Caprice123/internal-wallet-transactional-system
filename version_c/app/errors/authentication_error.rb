@@ -44,10 +44,19 @@ module AuthenticationError
     )
   end
 
-  class EmptyUserAccessToken < HandledError
+  class EmptyAccessToken < HandledError
     default(
       title: "Access token dibutuhkan",
       detail: "Access token dibutuhkan",
+      code: 1000,
+      status: :unauthorized,
+    )
+  end
+
+  class EmptySessionData < HandledError
+    default(
+      title: "Session data kosong",
+      detail: "Session data kosong",
       code: 1000,
       status: :unauthorized,
     )

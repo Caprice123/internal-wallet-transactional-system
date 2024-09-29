@@ -13,12 +13,12 @@ class Transactions::Wallet::DepositService < ApplicationService
     wallet.with_lock do
       current_balance = wallet.current_balance.to_f
 
-      wallet.increment!(:balance, @amount)
-
       deposit_transaction = DepositTransaction.create!(
         target_wallet_id: wallet.id,
         amount: @amount.to_f,
       )
+
+      wallet.increment!(:balance, @amount)
 
       Ledger.create!(
         wallet: wallet,

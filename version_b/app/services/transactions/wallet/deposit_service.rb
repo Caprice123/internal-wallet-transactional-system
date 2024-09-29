@@ -23,14 +23,14 @@ class Transactions::Wallet::DepositService < ApplicationService
       current_balance = wallet.current_balance.to_f
       raise Transactions::WalletError::BalanceNotEnough if current_balance - @amount < 0
 
-      wallet.decrement!(:balance, @amount)
-      target_wallet.increment!(:balance, @amount)
-
       deposit_transaction = DepositTransaction.create!(
         source_wallet_id: wallet.id,
         target_wallet_id: target_wallet.id,
         amount: @amount.to_f,
       )
+
+      wallet.decrement!(:balance, @amount)
+      target_wallet.increment!(:balance, @amount)
 
       Ledger.create!(
         wallet: wallet,

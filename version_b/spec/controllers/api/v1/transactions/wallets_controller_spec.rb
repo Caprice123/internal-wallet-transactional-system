@@ -3,7 +3,7 @@ describe "api/v1/transactions/wallets", type: :request do
   let!(:wallet) { create(:wallet, balance: 10) }
   let!(:ledger) { create(:ledger, wallet: wallet, amount: 10) }
   let!(:wallet2) { create(:wallet, balance: 15) }
-  let!(:ledger2) { create(:ledger, wallet: wallet2, amount: 15)}
+  let!(:ledger2) { create(:ledger, wallet: wallet2, amount: 15) }
   let!(:account_session) { create(:account_session, account: wallet.account) }
 
   describe "#topup" do
