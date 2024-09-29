@@ -17,7 +17,7 @@ describe Authentication::LoginService do
     it "raises error that indicates user is not valid" do
       expect do
         described_class.call(email: "email@gmail.com", password: "password", session: {})
-      end.to raise_error(AuthenticationError::AccountNotValid)
+      end.to raise_error(AuthenticationError::UserNotValid)
     end
   end
 

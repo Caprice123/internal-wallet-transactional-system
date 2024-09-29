@@ -11,7 +11,7 @@ class Authentication::LoginService < ApplicationService
     raise AuthenticationError::EmailNotValid if @email.blank? || !@email.match?(VALID_EMAIL_REGEX)
 
     user = User.find_by(email: @email)
-    raise AuthenticationError::AccountNotValid if user.blank?
+    raise AuthenticationError::UserNotValid if user.blank?
 
     if Rails.application.secrets.authentication_system.to_s.downcase == "session"
       login_via_session(user)

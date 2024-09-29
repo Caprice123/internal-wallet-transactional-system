@@ -37,7 +37,7 @@ describe "api/v1/session", type: :request do
             email: params[:email],
             password: params[:password],
             session: anything,
-          ).and_raise(AuthenticationError::AccountNotValid)
+          ).and_raise(AuthenticationError::UserNotValid)
 
           post(url, params: params)
 
@@ -45,8 +45,8 @@ describe "api/v1/session", type: :request do
           expect(response_body[:errors]).to eq(
             [
               {
-                title: "Account tidak valid",
-                detail: "Account tidak valid",
+                title: "User tidak valid",
+                detail: "User tidak valid",
                 errorCode: 1000,
               },
             ],
@@ -82,7 +82,7 @@ describe "api/v1/session", type: :request do
             email: params[:email],
             password: params[:password],
             session: anything,
-          ).and_raise(AuthenticationError::AccountNotValid)
+          ).and_raise(AuthenticationError::UserNotValid)
 
           post(url, params: params)
 
@@ -90,8 +90,8 @@ describe "api/v1/session", type: :request do
           expect(response_body[:errors]).to eq(
             [
               {
-                title: "Account tidak valid",
-                detail: "Account tidak valid",
+                title: "User tidak valid",
+                detail: "User tidak valid",
                 errorCode: 1000,
               },
             ],

@@ -8,10 +8,10 @@ module AuthenticationError
     )
   end
 
-  class AccountNotValid < HandledError
+  class UserNotValid < HandledError
     default(
-      title: "Account tidak valid",
-      detail: "Account tidak valid",
+      title: "User tidak valid",
+      detail: "User tidak valid",
       code: 1000,
       status: :unauthorized,
     )
