@@ -46,16 +46,18 @@ The file is structured in different environments, including `development`, `test
 
 Ensure the following environment variables are set:
 
-| Environment Variable   | Description                                        | Default (Development) | Default (Test) |
-|------------------------|----------------------------------------------------|-----------------------|----------------|
-| `DB_HOST`              | The host of your database server.                  | `127.0.0.1`           | `127.0.0.1`    |
-| `DB_NAME`              | The name of your database.                         | `localhost`             | `localhost`      |
-| `DB_USERNAME`          | The username for your database.                    | `root`                | `root`         |
-| `DB_PASSWORD`          | The password for your database.                    | `root`                | `root`         |
-| `DB_POOL`              | The database connection pool size.                 | `30`                  |                |
-| `RAPIDAPI_BASE_URL`     | The base URL for RapidAPI requests.                | *(required)*          | *(required)*   |
-| `RAPIDAPI_KEY`          | Your RapidAPI key for authentication.              | *(required)*          | *(required)*   |
-| `RAPIDAPI_HOST`         | The host for RapidAPI services.                    | *(required)*          | *(required)*   |
+| Environment Variable   | Description                                        | Default (Development) | Default (Test) | Options         |
+|------------------------|----------------------------------------------------|-----------------------|----------------|-----------------|
+| `DB_HOST`              | The host of your database server.                  | `127.0.0.1`           | `127.0.0.1`    |                 |
+| `DB_NAME`              | The name of your database.                         | `localhost`             | `localhost`  |                 |
+| `DB_USERNAME`          | The username for your database.                    | `root`                | `root`         |                 |
+| `DB_PASSWORD`          | The password for your database.                    | `root`                | `root`         |                 |
+| `DB_POOL`              | The database connection pool size.                 | `30`                  |                |                 |
+| `RAPIDAPI_BASE_URL`     | The base URL for RapidAPI requests.                | *(required)*          | *(required)*   |                 |
+| `RAPIDAPI_KEY`          | Your RapidAPI key for authentication.              | *(required)*          | *(required)*   |                 |
+| `RAPIDAPI_HOST`         | The host for RapidAPI services.                    | *(required)*          | *(required)*   |                 |
+| `AUTHENTICATION_SYSTEM` | The type of authentication system                  | `token`             | *(optional)*   | `session OR token` |
+| `USE_WALLET_BALANCE_COLUMN` | The flag to whether use the balance column to get the current balance of wallet                  | `false`             | *(optional)*   | `false OR true` |
 
 ### Example Setup
 
@@ -73,4 +75,6 @@ DB_POOL=30
 RAPIDAPI_BASE_URL=https://api.example.com
 RAPIDAPI_KEY=your-rapidapi-key
 RAPIDAPI_HOST=example-host
+AUTHENTICATION_SYSTEM=session
+USE_WALLET_BALANCE_COLUMN=false
 ```
