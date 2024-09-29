@@ -1,6 +1,6 @@
 describe Transactions::Wallet::WithdrawService do
-  let!(:account) { create(:account) }
-  let!(:wallet) { create(:user_wallet, account: account, balance: 5) }
+  let!(:user) { create(:user) }
+  let!(:wallet) { create(:user_wallet, user: user, balance: 5) }
   let!(:wallet2) { create(:user_wallet, balance: 5) }
 
   before do
@@ -11,39 +11,39 @@ describe Transactions::Wallet::WithdrawService do
   context "when amount is lower or equal to 0" do
     it "raises error that indicates amount must be bigger or equal to 0" do
       expect do
-        described_class.call(account: account, source_wallet_id: wallet.id, amount: -1)
+        described_class.call(user: user, source_wallet_id: wallet.id, amount: -1)
       end.to raise_error(Transactions::WalletError::AmountMustBeBiggerThanZero)
     end
   end
 
-  context "when account doesn't have any wallet" do
-    it "raises error that indicates account currently don't have any wallet" do
+  context "when user doesn't have any wallet" do
+    it "raises error that indicates user currently don't have any wallet" do
       expect do
-        described_class.call(account: account, source_wallet_id: -1, amount: 1)
+        described_class.call(user: user, source_wallet_id: -1, amount: 1)
       end.to raise_error(Transactions::WalletError::WalletNotFound)
     end
   end
 
-  context "when account try to deposit to other account's wallet" do
-    it "raises error that indicates that account cannot do transaction to other people's wallet" do
+  context "when user try to deposit to other user's wallet" do
+    it "raises error that indicates that user cannot do transaction to other people's wallet" do
       expect do
-        described_class.call(account: account, source_wallet_id: wallet2.id, amount: 1)
+        described_class.call(user: user, source_wallet_id: wallet2.id, amount: 1)
       end.to raise_error(Transactions::WalletError::CannotTransactToOthersWallet)
     end
   end
 
-  context "when wallet current balance is less than the amount that account wants to withdraw" do
+  context "when wallet current balance is less than the amount that user wants to withdraw" do
     it "raises error that indicates current balance is not enough" do
       expect do
-        described_class.call(account: account, source_wallet_id: wallet.id, amount: 10)
+        described_class.call(user: user, source_wallet_id: wallet.id, amount: 10)
       end.to raise_error(Transactions::WalletError::BalanceNotEnough)
     end
   end
 
-  context "when amount is bigger than 0 and account has wallet" do
+  context "when amount is bigger than 0 and user has wallet" do
     it "increments the wallet balance, record the credit transaction and create a ledger regarding that transaction" do
       expect do
-        described_class.call(account: account, source_wallet_id: wallet.id, amount: 1)
+        described_class.call(user: user, source_wallet_id: wallet.id, amount: 1)
       end.to change { wallet.reload.balance }.from(5).to(4)
         .and change { WithdrawTransaction.count }.by(1)
         .and change { Ledger.count }.by(1)

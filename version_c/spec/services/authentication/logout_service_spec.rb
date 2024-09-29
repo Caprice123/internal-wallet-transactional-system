@@ -1,5 +1,5 @@
 describe Authentication::LogoutService do
-  let!(:account_session) { create(:account_session) }
+  let!(:user_session) { create(:user_session) }
 
   before do
     travel_to Time.parse("2024-09-27 00:00:00 +07:00")
@@ -10,10 +10,10 @@ describe Authentication::LogoutService do
       expect(Rails.application.secrets).to receive(:authentication_system).and_return("token")
     end
 
-    it "disables all current account sessions" do
+    it "disables all current user sessions" do
       expect do
-        described_class.call(account: account_session.account, session: { account_id: 1, expired_at: Time.now + 30.minutes })
-      end.to change { account_session.reload.enabled }.from(true).to(false)
+        described_class.call(user: user_session.user, session: { user_id: 1, expired_at: Time.now + 30.minutes })
+      end.to change { user_session.reload.enabled }.from(true).to(false)
     end
   end
 
@@ -22,10 +22,10 @@ describe Authentication::LogoutService do
       expect(Rails.application.secrets).to receive(:authentication_system).and_return("session")
     end
 
-    it "doesn't disable all current account sessions" do
+    it "doesn't disable all current user sessions" do
       expect do
-        described_class.call(account: account_session.account, session: { account_id: 1, expired_at: Time.now + 30.minutes })
-      end.to_not change { account_session.reload.enabled }.from(true)
+        described_class.call(user: user_session.user, session: { user_id: 1, expired_at: Time.now + 30.minutes })
+      end.to_not change { user_session.reload.enabled }.from(true)
     end
   end
 end
