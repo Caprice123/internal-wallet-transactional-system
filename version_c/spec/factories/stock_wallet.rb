@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :stock_wallet do
-    account { create(:account) }
+    user { create(:user) }
     balance { 0 }
   end
 end

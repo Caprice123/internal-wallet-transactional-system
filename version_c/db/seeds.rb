@@ -11,20 +11,20 @@ class Seeder
       # safeguard the seeds from being ran in prod
       return unless Rails.env.development?
 
-      # add account
-      seed_mock_accounts
+      # add user
+      seed_mock_users
     end
 
-    private def seed_mock_accounts
+    private def seed_mock_users
       3.times do |i|        
-        account = Account.create!(
-          name: "account #{i}",
-          email: "account#{i}@gmail.com",
+        user = User.create!(
+          name: "user #{i}",
+          email: "user#{i}@gmail.com",
           password: "password",
         )
-        UserWallet.create!(account: account)
-        TeamWallet.create!(account: account)
-        StockWallet.create!(account: account)
+        UserWallet.create!(user: user)
+        TeamWallet.create!(user: user)
+        StockWallet.create!(user: user)
       end
     end
   end

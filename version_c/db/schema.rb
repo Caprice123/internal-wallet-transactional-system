@@ -11,26 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2024_09_27_062510) do
-  create_table "account_sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "account_id", null: false
-    t.string "session_id", null: false
-    t.datetime "expired_at", null: false
-    t.boolean "enabled", default: true, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id", "enabled"], name: "index_account_sessions_on_account_id_and_enabled"
-    t.index ["session_id"], name: "index_account_sessions_on_session_id", unique: true
-  end
-
-  create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "email", null: false
-    t.string "password_digest", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_accounts_on_email", unique: true
-  end
-
   create_table "ledgers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "wallet_id", null: false
     t.bigint "transaction_id", null: false
@@ -55,11 +35,31 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_27_062510) do
     t.index ["type"], name: "index_transactions_on_type"
   end
 
+  create_table "user_sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "session_id", null: false
+    t.datetime "expired_at", null: false
+    t.boolean "enabled", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id"], name: "index_user_sessions_on_session_id", unique: true
+    t.index ["user_id", "enabled"], name: "index_user_sessions_on_user_id_and_enabled"
+  end
+
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "password_digest", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
   create_table "wallets", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "account_id", null: false
+    t.bigint "user_id", null: false
     t.decimal "balance", precision: 10, default: "0", null: false
     t.string "type", null: false
-    t.index ["account_id"], name: "index_wallets_on_account_id", unique: true
+    t.index ["user_id"], name: "index_wallets_on_user_id", unique: true
   end
 
 end

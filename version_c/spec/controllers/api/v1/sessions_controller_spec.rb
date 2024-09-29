@@ -103,15 +103,15 @@ describe "api/v1/session", type: :request do
 
   describe "#logout" do
     let(:url) { "#{prefix_url}/logout" }
-    let!(:account_session) { create(:account_session) }
+    let!(:user_session) { create(:user_session) }
     let(:headers) do
       {
-        Authorization: "Bearer #{account_session.session_id}",
+        Authorization: "Bearer #{user_session.session_id}",
       }
     end
 
     it "calls logout service to disable all the session tokens" do
-      expect(Authentication::LogoutService).to receive(:call).with(account: account_session.account, session: anything)
+      expect(Authentication::LogoutService).to receive(:call).with(user: user_session.user, session: anything)
 
       post(url, headers: headers)
 

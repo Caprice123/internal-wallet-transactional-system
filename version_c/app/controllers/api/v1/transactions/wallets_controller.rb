@@ -6,7 +6,7 @@ class Api::V1::Transactions::WalletsController < Api::V1::BaseController
     )
 
     wallet = Transactions::Wallet::DepositService.call(
-      account: current_account,
+      user: current_user,
       target_wallet_id: params[:targetWalletId].to_i,
       amount: params[:amount].to_f,
     )
@@ -26,7 +26,7 @@ class Api::V1::Transactions::WalletsController < Api::V1::BaseController
     )
 
     wallet = Transactions::Wallet::WithdrawService.call(
-      account: current_account,
+      user: current_user,
       source_wallet_id: params[:sourceWalletId].to_i,
       amount: params[:amount].to_f,
     )

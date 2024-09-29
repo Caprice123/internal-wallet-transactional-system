@@ -12,8 +12,8 @@ describe Api::V1::BaseController, type: :controller do
     end
   end
 
-  describe "#authenticate_account_by_session" do
-    let!(:account) { create(:account) }
+  describe "#authenticate_user_by_session" do
+    let!(:user) { create(:user) }
 
     before do
       expect(Rails.application.secrets).to receive(:authentication_system).and_return("session")
@@ -39,7 +39,7 @@ describe Api::V1::BaseController, type: :controller do
 
     context "when session already expired" do
       it "raises error that indicates session already expired" do
-        session[:account_id] = account.id
+        session[:user_id] = user.id
         session[:expired_at] = Time.now - 1.minute
 
         get(:index)
@@ -57,9 +57,9 @@ describe Api::V1::BaseController, type: :controller do
     end
   end
 
-  describe "#authenticate_account_by_token" do
-    let!(:account) { create(:account) }
-    let!(:account_session) { create(:account_session) }
+  describe "#authenticate_user_by_token" do
+    let!(:user) { create(:user) }
+    let!(:user_session) { create(:user_session) }
 
     before do
       expect(Rails.application.secrets).to receive(:authentication_system).and_return("token")
@@ -117,8 +117,8 @@ describe Api::V1::BaseController, type: :controller do
 
     context "when session is already disabled" do
       it "returns error that session already expired" do
-        account_session.update!(enabled: false)
-        @request.headers["Authorization"] = "Bearer #{account_session.session_id}"
+        user_session.update!(enabled: false)
+        @request.headers["Authorization"] = "Bearer #{user_session.session_id}"
         get(:index)
         expect(response.code).to eq("401")
         expect(response_body[:errors]).to eq(
@@ -135,8 +135,8 @@ describe Api::V1::BaseController, type: :controller do
 
     context "when session already expired" do
       it "returns error that session already expired" do
-        account_session.update!(expired_at: Time.now - 1.day)
-        @request.headers["Authorization"] = "Bearer #{account_session.session_id}"
+        user_session.update!(expired_at: Time.now - 1.day)
+        @request.headers["Authorization"] = "Bearer #{user_session.session_id}"
         get(:index)
         expect(response.code).to eq("401")
         expect(response_body[:errors]).to eq(

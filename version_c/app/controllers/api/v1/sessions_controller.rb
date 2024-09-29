@@ -23,7 +23,7 @@ class Api::V1::SessionsController < Api::V1::BaseController
 
   def logout
     Authentication::LogoutService.call(
-      account: current_account,
+      user: current_user,
       session: session,
     )
 
