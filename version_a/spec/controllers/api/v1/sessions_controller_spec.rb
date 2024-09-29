@@ -1,5 +1,5 @@
-describe "api/v1/session", type: :request do
-  let(:prefix_url) { "/api/v1/session" }
+describe "api/v1", type: :request do
+  let(:prefix_url) { "/api/v1" }
 
   describe "#login" do
     let(:url) { "#{prefix_url}/login" }
@@ -113,7 +113,7 @@ describe "api/v1/session", type: :request do
     it "calls logout service to disable all the session tokens" do
       expect(Authentication::LogoutService).to receive(:call).with(account: account_session.account, session: anything)
 
-      post(url, headers: headers)
+      delete(url, headers: headers)
 
       expect(response.code).to eq("200")
       expect(response_body[:data]).to eq(

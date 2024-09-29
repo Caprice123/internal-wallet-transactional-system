@@ -36,14 +36,14 @@ describe Transactions::Wallet::WithdrawService do
       expect do
         described_class.call(account: account, amount: 1)
       end.to change { wallet.reload.balance }.from(10).to(9)
-        .and change { DebitTransaction.count }.by(1)
+        .and change { WithdrawTransaction.count }.by(1)
         .and change { Ledger.count }.by(1)
 
-      transaction = DebitTransaction.last
+      transaction = WithdrawTransaction.last
       expect(transaction.source_wallet_id).to be_nil
       expect(transaction.target_wallet_id).to eq(wallet.id)
       expect(transaction.amount).to eq(1)
-      expect(transaction.type).to eq("DebitTransaction")
+      expect(transaction.type).to eq("WithdrawTransaction")
 
       ledger = Ledger.last
       expect(ledger.transaction_id).to eq(transaction.id)

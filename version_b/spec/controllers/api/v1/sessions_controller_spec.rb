@@ -1,5 +1,5 @@
-describe "api/v1/session", type: :request do
-  let(:prefix_url) { "/api/v1/session" }
+describe "api/v1", type: :request do
+  let(:prefix_url) { "/api/v1" }
 
   describe "#login" do
     let(:url) { "#{prefix_url}/login" }
@@ -12,7 +12,7 @@ describe "api/v1/session", type: :request do
 
     context "when authenticaation type is set as token" do
       context "and login service returns session id" do
-        it "returns session id to the user" do
+        it "returns session id" do
           expect(Authentication::LoginService).to receive(:call).with(
             email: params[:email],
             password: params[:password],
@@ -32,7 +32,7 @@ describe "api/v1/session", type: :request do
       end
 
       context "when login service raises any error" do
-        it "returns error to the user" do
+        it "returns error" do
           expect(Authentication::LoginService).to receive(:call).with(
             email: params[:email],
             password: params[:password],
@@ -57,7 +57,7 @@ describe "api/v1/session", type: :request do
 
     context "when authorization type is set as session" do
       context "and login service returns session id" do
-        it "returns session id to the user" do
+        it "returns session id" do
           expect(Authentication::LoginService).to receive(:call).with(
             email: params[:email],
             password: params[:password],
@@ -77,7 +77,7 @@ describe "api/v1/session", type: :request do
       end
 
       context "when login service raises any error" do
-        it "returns error to the user" do
+        it "returns error" do
           expect(Authentication::LoginService).to receive(:call).with(
             email: params[:email],
             password: params[:password],
@@ -113,7 +113,7 @@ describe "api/v1/session", type: :request do
     it "calls logout service to disable all the session tokens" do
       expect(Authentication::LogoutService).to receive(:call).with(account: account_session.account, session: anything)
 
-      post(url, headers: headers)
+      delete(url, headers: headers)
 
       expect(response.code).to eq("200")
       expect(response_body[:data]).to eq(

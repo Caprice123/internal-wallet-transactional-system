@@ -24,14 +24,14 @@ describe Transactions::Wallet::DepositService do
       expect do
         described_class.call(account: account, amount: 1)
       end.to change { wallet.reload.current_balance }.from(0).to(1)
-        .and change { CreditTransaction.count }.by(1)
+        .and change { DepositTransaction.count }.by(1)
         .and change { Ledger.count }.by(1)
 
-      transaction = CreditTransaction.last
+      transaction = DepositTransaction.last
       expect(transaction.source_wallet_id).to be_nil
       expect(transaction.target_wallet_id).to eq(wallet.id)
       expect(transaction.amount).to eq(1)
-      expect(transaction.type).to eq("CreditTransaction")
+      expect(transaction.type).to eq("DepositTransaction")
 
       ledger = Ledger.last
       expect(ledger.transaction_id).to eq(transaction.id)
