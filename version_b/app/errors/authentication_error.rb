@@ -28,8 +28,8 @@ module AuthenticationError
 
   class SessionExpired < HandledError
     default(
-      title: "Session user telah expired",
-      detail: "Session user telah expired",
+      title: "Session telah expired",
+      detail: "Session telah expired",
       code: 1000,
       status: :unauthorized,
     )
@@ -44,7 +44,7 @@ module AuthenticationError
     )
   end
 
-  class EmptyUserAccessToken < HandledError
+  class EmptyAccessToken < HandledError
     default(
       title: "Access token dibutuhkan",
       detail: "Access token dibutuhkan",

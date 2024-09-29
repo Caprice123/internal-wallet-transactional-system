@@ -6,7 +6,7 @@ class Transactions::Wallet::TopupService < ApplicationService
 
   def call
     raise Transactions::WalletError::AmountMustBeBiggerThanZero if @amount <= 0
-    raise TransactionError::UnallowedUserToDoTopup unless @account.is_a?(UserAccount)
+    raise TransactionError::UnallowedAccountToDoTopup unless @account.is_a?(UserAccount)
 
     wallet = @account.wallet
     raise Transactions::WalletError::WalletNotFound if wallet.blank?

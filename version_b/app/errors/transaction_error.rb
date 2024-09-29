@@ -1,5 +1,5 @@
 module TransactionError
-  class UnallowedUserToDoTopup < HandledError
+  class UnallowedAccountToDoTopup < HandledError
     default(
       title: "Hanya User Account yang diperbolehkan topup untuk endpoint ini",
       detail: "Hanya User Account yang diperbolehkan topup untuk endpoint ini",

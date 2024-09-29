@@ -11,8 +11,8 @@ describe Transactions::Wallet::WithdrawService do
     end
   end
 
-  context "when user doesn't have any wallet" do
-    it "raises error that indicates user currently don't have any wallet" do
+  context "when account doesn't have any wallet" do
+    it "raises error that indicates account currently don't have any wallet" do
       expect do
         described_class.call(account: account, source_wallet_id: wallet2.id, amount: 1)
       end.to raise_error(Transactions::WalletError::WalletNotFound)
@@ -29,7 +29,7 @@ describe Transactions::Wallet::WithdrawService do
     end
   end
 
-  context "when wallet current balance is less than the amount that user wants to withdraw" do
+  context "when wallet current balance is less than the amount that account wants to withdraw" do
     it "raises error that indicates current balance is not enough" do
       wallet = create(:wallet, account: account, balance: 5)
       create(:ledger, wallet: wallet, amount: 5)
@@ -40,7 +40,7 @@ describe Transactions::Wallet::WithdrawService do
     end
   end
 
-  context "when amount is bigger than 0 and user has wallet" do
+  context "when amount is bigger than 0 and account has wallet" do
     it "increments the wallet balance, record the credit transaction and create a ledger regarding that transaction" do
       wallet2.update!(balance: 10)
       create(:ledger, wallet: wallet2, amount: 10)

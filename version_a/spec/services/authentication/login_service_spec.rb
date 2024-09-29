@@ -37,7 +37,7 @@ describe Authentication::LoginService do
     end
 
     context "and credential is matched" do
-      context "and haven't logged in" do
+      context "and account haven't logged in" do
         it "returns new session id and creates a new session id" do
           expect_any_instance_of(Account).to receive(:authenticate).with("password").and_return(true)
 
@@ -58,7 +58,7 @@ describe Authentication::LoginService do
         end
       end
 
-      context "and has logged in before" do
+      context "and account has logged in before" do
         it "returns new session id and disable the old session id" do
           account_session = create(:account_session, account: account)
           expect_any_instance_of(Account).to receive(:authenticate).with("password").and_return(true)
@@ -88,7 +88,7 @@ describe Authentication::LoginService do
       expect(Rails.application.secrets).to receive(:authentication_system).and_return("session")
     end
 
-    context "and haven't logged in" do
+    context "and account haven't logged in" do
       it "returns new session id and creates a new session id" do
         expect_any_instance_of(Account).to_not receive(:authenticate)
 
@@ -102,7 +102,7 @@ describe Authentication::LoginService do
       end
     end
 
-    context "and has logged in before" do
+    context "and account has logged in before" do
       it "returns new session id and disable the old session id" do
         expect_any_instance_of(Account).to_not receive(:authenticate)
 

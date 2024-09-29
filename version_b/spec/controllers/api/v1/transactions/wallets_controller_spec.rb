@@ -20,7 +20,7 @@ describe "api/v1/transactions/wallets", type: :request do
     end
 
     context "when topup service returns success" do
-      it "returns session id to the user" do
+      it "returns session id" do
         expect(Transactions::Wallet::TopupService).to receive(:call)
           .with(account: wallet.account, amount: 10)
           .and_call_original
@@ -38,7 +38,7 @@ describe "api/v1/transactions/wallets", type: :request do
     end
 
     context "when topup service raises any error" do
-      it "returns error to the user" do
+      it "returns error" do
         expect(Transactions::Wallet::TopupService).to receive(:call)
           .with(account: wallet.account, amount: 10)
           .and_raise(Transactions::WalletError::AmountMustBeBiggerThanZero)
@@ -74,7 +74,7 @@ describe "api/v1/transactions/wallets", type: :request do
     end
 
     context "when deposit service returns success" do
-      it "returns session id to the user" do
+      it "returns session id" do
         expect(Transactions::Wallet::DepositService).to receive(:call)
           .with(account: wallet.account, target_wallet_id: wallet2.id, amount: 10)
           .and_call_original
@@ -92,7 +92,7 @@ describe "api/v1/transactions/wallets", type: :request do
     end
 
     context "when deposit service raises any error" do
-      it "returns error to the user" do
+      it "returns error" do
         expect(Transactions::Wallet::DepositService).to receive(:call)
           .with(account: wallet.account, target_wallet_id: wallet2.id, amount: 10)
           .and_raise(Transactions::WalletError::AmountMustBeBiggerThanZero)
@@ -128,7 +128,7 @@ describe "api/v1/transactions/wallets", type: :request do
     end
 
     context "when withdraw service returns success" do
-      it "returns session id to the user" do
+      it "returns session id" do
         expect(Transactions::Wallet::WithdrawService).to receive(:call)
           .with(account: wallet.account, source_wallet_id: wallet2.id, amount: 10)
           .and_call_original
@@ -146,7 +146,7 @@ describe "api/v1/transactions/wallets", type: :request do
     end
 
     context "when withdraw service raises any error" do
-      it "returns error to the user" do
+      it "returns error" do
         expect(Transactions::Wallet::WithdrawService).to receive(:call)
           .with(account: wallet.account, source_wallet_id: wallet2.id, amount: 10)
           .and_raise(Transactions::WalletError::AmountMustBeBiggerThanZero)

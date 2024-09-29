@@ -38,7 +38,7 @@ class ApplicationController < ActionController::API
   def append_info_to_payload(payload)
     super
     @application_tag ||= nil
-    payload[:account_id] = @current_user&.id
+    payload[:account_id] = @current_account&.id
     payload[:error] = @error
     payload[:response] = JSON.parse(response.body)
   end
